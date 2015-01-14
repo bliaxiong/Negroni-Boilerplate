@@ -25,6 +25,7 @@ Requirements
 Configuration
 --------------
 Import users-mysql.sql in your MySQL database, then edit database url in main.go .
+
 Soon I'll provide a config file for settings.
 
 To Do
