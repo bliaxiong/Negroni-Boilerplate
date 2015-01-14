@@ -1,8 +1,7 @@
-Negroni Example
+Negroni Boilerplate
 ===============
 
-This is an forked Negroni web app with basic auth and users registrations via MySQL database
-
+This is a forked Negroni web app with basic auth and user registrations via MySQL database
 
 Note
 ----------
