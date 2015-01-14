@@ -1,4 +1,4 @@
-Negroni Boilerplate
+Negroni Boilerplate (MySQL version)
 ===============
 
 This is a forked Negroni web app with basic auth and user registrations via MySQL database
