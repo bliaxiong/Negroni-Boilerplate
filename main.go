@@ -5,11 +5,12 @@ import (
 	"encoding/json"
 	"github.com/codegangsta/negroni"
 	"github.com/goincremental/negroni-sessions"
+	"github.com/goincremental/negroni-sessions/cookiestore"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/unrolled/render"
+	"fmt"
 	"log"
 	"net/http"
-	"os"
 )
 
 var db *sql.DB = setupDB()
@@ -21,7 +22,7 @@ func main() {
 	mux := http.NewServeMux()
 	n := negroni.Classic()
 
-	store := sessions.NewCookieStore([]byte("ohhhsooosecret"))
+	store := cookiestore.New([]byte("secretkey789"))
 	n.Use(sessions.Sessions("global_session_store", store))
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -59,7 +60,8 @@ func main() {
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
 	n.UseHandler(mux)
-	n.Run(":" + os.Getenv("PORT"))
+	n.Run(":8080")
+	fmt.Println("Server running on port 8080")
 
 }
 
