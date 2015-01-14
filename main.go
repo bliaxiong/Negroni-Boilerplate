@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"github.com/codegangsta/negroni"
 	"github.com/goincremental/negroni-sessions"
-	_ "github.com/lib/pq"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/unrolled/render"
 	"log"
 	"net/http"
@@ -16,18 +16,19 @@ var db *sql.DB = setupDB()
 
 func init() {
 
-	db.Exec(`CREATE TABLE users (
-                 id SERIAL,
-                 user_name VARCHAR(60),  
-                 user_email VARCHAR(60),  
-                 user_password VARCHAR(60),  
-                 user_created TIMESTAMP WITH TIME ZONE,
-                 user_last_login TIMESTAMP WITH TIME ZONE, 
-                 PRIMARY KEY  (id),  
-                 CONSTRAINT users_email UNIQUE (user_email)
-            );`)
+	db.Exec(`CREATE TABLE IF NOT EXISTS `users` (
+  		`id` int(11) NOT NULL AUTO_INCREMENT,
+  		`user_name` varchar(60) NOT NULL,
+  		`user_email` varchar(60) NOT NULL,
+  		`user_password` varchar(60) NOT NULL,
+  		`user_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  		`user_last_login` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  		PRIMARY KEY (`id`),
+  		UNIQUE KEY `user_name` (`user_name`),
+  		UNIQUE KEY `user_email` (`user_email`)
+		) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;`)
 
-	db.Exec(`INSERT INTO users (user_name, user_email, user_password)
+	db.Exec(`INSERT IGNORE INTO users (user_name, user_email, user_password)
              VALUES ('john', 'john@example.com', 'supersecret');`)
 
 }
@@ -83,8 +84,7 @@ func main() {
 
 func setupDB() *sql.DB {
 
-	db_url := os.Getenv("DATABASE_URL")
-	db, err := sql.Open("postgres", db_url)
+	db, err := sql.Open("mysql", "root:password@/negroni?charset=utf8")
 	if err != nil {
 		panic(err)
 	}
@@ -134,7 +134,7 @@ func LoginPost(w http.ResponseWriter, req *http.Request) {
 		email string
 	)
 
-    err := db.QueryRow("SELECT user_email FROM users WHERE user_name = $1 AND user_password = $2", username, password).Scan(&email)
+    err := db.QueryRow("SELECT user_email FROM users WHERE user_name = ? AND user_password = ?", username, password).Scan(&email)
 	if err != nil {
 		log.Print(err)
 		http.Redirect(w, req, "/authfail", 301)
@@ -151,7 +151,7 @@ func SignupPost(w http.ResponseWriter, req *http.Request) {
 	password := req.FormValue("inputPassword")
 	email := req.FormValue("inputEmail")
 
-	_, err := db.Exec("INSERT INTO users (user_name, user_password, user_email) VALUES ($1, $2, $3)", username, password, email)
+	_, err := db.Exec("INSERT INTO users (user_name, user_password, user_email) VALUES (?, ?, ?)", username, password, email)
 	if err != nil {
 		log.Print(err)
 	}
