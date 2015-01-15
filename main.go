@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"github.com/codegangsta/negroni"
+	"golang.org/x/crypto/bcrypt"
 	"github.com/goincremental/negroni-sessions"
 	"github.com/goincremental/negroni-sessions/cookiestore"
 	_ "github.com/go-sql-driver/mysql"
@@ -133,8 +134,8 @@ func SignupPost(w http.ResponseWriter, req *http.Request) {
 	username := req.FormValue("inputUsername")
 	password := req.FormValue("inputPassword")
 	email := req.FormValue("inputEmail")
-
-	_, err := db.Exec("INSERT INTO users (user_name, user_password, user_email) VALUES (?, ?, ?)", username, password, email)
+	hashed_password := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	_, err := db.Exec("INSERT INTO users (user_name, user_password, user_email) VALUES (?, ?, ?)", username, hashed_password, email)
 	if err != nil {
 		log.Print(err)
 	}
