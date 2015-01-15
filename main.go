@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"github.com/codegangsta/negroni"
+	"golang.org/x/crypto/bcrypt"
 	"github.com/goincremental/negroni-sessions"
 	"github.com/goincremental/negroni-sessions/cookiestore"
 	_ "github.com/go-sql-driver/mysql"
@@ -115,10 +116,13 @@ func LoginPost(w http.ResponseWriter, req *http.Request) {
 
 	var (
 		email string
+		hashed_password string
 	)
 
-    err := db.QueryRow("SELECT user_email FROM users WHERE user_name = ? AND user_password = ?", username, password).Scan(&email)
-	if err != nil {
+    err := db.QueryRow("SELECT user_email, user_password FROM users WHERE user_name = ? AND user_password = ?", username, password).Scan(&email, &hashed_password)
+	password_err := bcrypt.CompareHashAndPassword([]byte(hashed_password), []byte(password))
+	
+	if err != nil && password_err != nil {
 		log.Print(err)
 		http.Redirect(w, req, "/authfail", 301)
 	}
@@ -133,8 +137,8 @@ func SignupPost(w http.ResponseWriter, req *http.Request) {
 	username := req.FormValue("inputUsername")
 	password := req.FormValue("inputPassword")
 	email := req.FormValue("inputEmail")
-
-	_, err := db.Exec("INSERT INTO users (user_name, user_password, user_email) VALUES (?, ?, ?)", username, password, email)
+	hashed_password := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	_, err := db.Exec("INSERT INTO users (user_name, user_password, user_email) VALUES (?, ?, ?)", username, hashed_password, email)
 	if err != nil {
 		log.Print(err)
 	}
