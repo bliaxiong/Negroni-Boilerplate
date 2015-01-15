@@ -68,7 +68,7 @@ func main() {
 
 func setupDB() *sql.DB {
 
-	db, err := sql.Open("mysql", "root:venomdb@/negroni?charset=utf8")
+	db, err := sql.Open("mysql", "root:password@/negroni?charset=utf8")
 	if err != nil {
 		panic(err)
 	}

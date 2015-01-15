@@ -5,8 +5,7 @@ This is a forked Negroni web app with basic auth and user registrations via MySQ
 
 Note
 ----------
-- Please note that this example at the current time lacks a few important security features (ie. password hashing) 
-and as such should not be used in production without a lot of changes.
+We're working on Bcrypt passwords...
 
 Features
 ----------
@@ -32,7 +31,7 @@ Soon I'll provide a config file for settings.
 To Do
 -----------
 
-* Hash passwords
+* Fix login with Bcrypt
 * More extensive api examples
 * Add a minimal CRUD
 
