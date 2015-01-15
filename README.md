@@ -5,7 +5,7 @@ This is a forked Negroni web app with basic auth and user registrations via MySQ
 
 Note
 ----------
-Working Bcrypt login\registration
+Fixed Bcrypt login\registration
 
 Features
 ----------
