@@ -17,6 +17,7 @@ Features
 Requirements
 -----------
 * go get github.com/BurntSushi/toml
+* go get golang.org/x/crypto/bcrypt
 * go get github.com/codegangsta/negroni
 * go get github.com/goincremental/negroni-sessions
 * go get github.com/goincremental/negroni-sessions/cookiestore
