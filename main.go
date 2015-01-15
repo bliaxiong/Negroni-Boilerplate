@@ -140,6 +140,7 @@ func LoginPost(w http.ResponseWriter, req *http.Request) {
 	
 	if err != nil && password_err != nil {
 		log.Print(err)
+		log.Print(password_err)
 		http.Redirect(w, req, "/authfail", 301)
 	}
 
