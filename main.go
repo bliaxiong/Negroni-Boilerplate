@@ -135,7 +135,7 @@ func LoginPost(w http.ResponseWriter, req *http.Request) {
 		hashed_password string
 	)
 
-    err := db.QueryRow("SELECT user_email, user_password FROM users WHERE user_name = ? AND user_password = ?", username, password).Scan(&email, &hashed_password)
+    err := db.QueryRow("SELECT user_email, user_password FROM users WHERE user_name = ?", username).Scan(&email, &hashed_password)
 	password_err := bcrypt.CompareHashAndPassword([]byte(hashed_password), []byte(password))
 	
 	if err != nil && password_err != nil {
