@@ -10,6 +10,7 @@ We're working on Bcrypt passwords...
 Features
 ----------
 * Signup/Login
+* TOML support for configuration
 * Pages rendered from templates
 * Very Simple API call via Javascript on homepage
 
@@ -24,9 +25,7 @@ Requirements
 
 Configuration
 --------------
-Import users-mysql.sql in your MySQL database, then edit database url in main.go .
-
-Soon I'll provide a config file for settings.
+Import users-mysql.sql in your MySQL database, then edit config.toml
 
 To Do
 -----------
