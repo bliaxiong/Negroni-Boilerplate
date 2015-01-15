@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"github.com/BurntSushi/toml"
 	"github.com/codegangsta/negroni"
 	"golang.org/x/crypto/bcrypt"
 	"github.com/goincremental/negroni-sessions"
@@ -13,6 +14,16 @@ import (
 	"log"
 	"net/http"
 )
+
+type tomlConfig struct {
+	DB database `toml:"database"`
+}
+
+type database struct {
+	User string
+	Password string
+	DBName string
+}
 
 var db *sql.DB = setupDB()
 
@@ -68,7 +79,12 @@ func main() {
 
 func setupDB() *sql.DB {
 
-	db, err := sql.Open("mysql", "root:password@/negroni?charset=utf8")
+	var config tomlConfig
+		if _, err := toml.DecodeFile("config.toml", &config); err != nil {
+		log.Print(err)
+	}
+
+	db, err := sql.Open("mysql", config.DB.User + ":" + config.DB.Password + "@/" + config.DB.DBName + "?charset=utf8")
 	if err != nil {
 		panic(err)
 	}
