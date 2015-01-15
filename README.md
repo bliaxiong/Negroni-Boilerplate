@@ -5,11 +5,12 @@ This is a forked Negroni web app with basic auth and user registrations via MySQ
 
 Note
 ----------
-We're working on Bcrypt passwords...
+Working Bcrypt login\registration
 
 Features
 ----------
 * Signup/Login
+* Bcrypt passwords
 * TOML support for configuration
 * Pages rendered from templates
 * Very Simple API call via Javascript on homepage
@@ -31,7 +32,6 @@ Import users-mysql.sql in your MySQL database, then edit config.toml
 To Do
 -----------
 
-* Fix login with Bcrypt
 * More extensive api examples
 * Add a minimal CRUD
 
