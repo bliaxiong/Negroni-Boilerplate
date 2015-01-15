@@ -9,6 +9,3 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `user_name` (`user_name`),
   UNIQUE KEY `user_email` (`user_email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-
-INSERT INTO `users` (`id`, `user_name`, `user_email`, `user_password`, `user_created`, `user_last_login`) VALUES
-	(1, 'john', 'john@example.com', 'supersecret', '2015-01-14 23:20:40', '0000-00-00 00:00:00');

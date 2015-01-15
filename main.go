@@ -68,7 +68,7 @@ func main() {
 
 func setupDB() *sql.DB {
 
-	db, err := sql.Open("mysql", "root:password@/negroni?charset=utf8")
+	db, err := sql.Open("mysql", "root:venomdb@/negroni?charset=utf8")
 	if err != nil {
 		panic(err)
 	}
@@ -137,7 +137,10 @@ func SignupPost(w http.ResponseWriter, req *http.Request) {
 	username := req.FormValue("inputUsername")
 	password := req.FormValue("inputPassword")
 	email := req.FormValue("inputEmail")
-	hashed_password := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	hashed_password,hash_err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if hash_err !=nil{
+		log.Print(hash_err)
+	}
 	_, err := db.Exec("INSERT INTO users (user_name, user_password, user_email) VALUES (?, ?, ?)", username, hashed_password, email)
 	if err != nil {
 		log.Print(err)
